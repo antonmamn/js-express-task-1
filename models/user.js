@@ -1,6 +1,8 @@
-const {Model, DataTypes} = require("sequelize");
-const Post = require(`./post.js`)
-module.exports = (sequelize, DataTypes) => {
+const {Model, DataTypes} = require('sequelize');
+const db = require('../index');
+const {sequelize} = db;
+
+
     class User extends Model {
         static associate(models) {
            User.hasMany(models.Post, {foreignKey:"author", onDelete: 'CASCADE'});
@@ -24,5 +26,4 @@ module.exports = (sequelize, DataTypes) => {
             }
         ]
     });
-    return User;
-};
+ module.exports=User

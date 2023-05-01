@@ -3,13 +3,11 @@ const app = express()
 const port = 3000
 app.use(express.json())
 
-const db = require('./models');
-const {sequelize} = db;
-const {Model, DataTypes} = require("sequelize");
-const User = require("./models/user")(sequelize, DataTypes);
-const Post = require("./models/post")(sequelize, DataTypes);
-const Book = require("./models/book")(sequelize, DataTypes);
-const UserBook = require("./models/user-book")(sequelize, DataTypes);
+const associations =require("./associations")
+const User = require("./models/user")
+const Post = require("./models/post")
+const Book = require("./models/book")
+const UserBook = require("./models/user-book")
 
 app.get('/users', (req, res) => {
     User.findAll()
@@ -61,7 +59,7 @@ app.post(`/posts`, (req, res) => {
         .catch(error => res.send(error))
 })
 app.get(`/posts`, (req, res) => {
-    Post.findAll(/*{ include: User,as:'users' }*/)
+    Post.findAll()
         .then(data => res.send(data))
         .catch(error => res.send(error))
 })
@@ -104,7 +102,11 @@ app.post(`/books`, (req, res) => {
         .catch(error => res.send(error))
 })
 app.get(`/books`, (req, res) => {
-    Book.findAll(/*{ include: User,as:'users' }*/)
+    Book.findAll({ include: {
+            model: User,
+             attributes: ['id'],
+            through:{attributes:[]}
+        }})
         .then(data => res.send(data))
         .catch(error => res.send(error))
 })

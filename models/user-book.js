@@ -1,12 +1,10 @@
-const {Model, DataTypes} = require("sequelize");
-const Post = require(`./post.js`)
-module.exports = (sequelize, DataTypes) => {
+const {Model, DataTypes} = require('sequelize');
+const db = require('../index');
+const {sequelize} = db;
+
+
     class UserBook extends Model {
-        static associate(models) {
-             models.User.hasMany(models.Post, { onDelete: 'CASCADE'});
-            models.User.belongsToMany(models.Book,{through:  models.UserBook,onDelete: 'CASCADE'})
-        }
-    }
+           }
     UserBook.init({
         id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
         userId: {
@@ -31,5 +29,4 @@ module.exports = (sequelize, DataTypes) => {
             }
         ]
     });
-    return UserBook;
-};
+module.exports=UserBook

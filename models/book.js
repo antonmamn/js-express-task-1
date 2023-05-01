@@ -1,12 +1,8 @@
-const {
-    Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-    class Book extends Model {
+const {Model, DataTypes} = require('sequelize');
+const db = require('../index');
+const {sequelize} = db;
 
-        static associate(models) {
-       Book.belongsToMany(models.User, {through: `associate-user-book`,onDelete: 'CASCADE'})
-        }
+    class Book extends Model {
     }
 
     Book.init({
@@ -18,5 +14,4 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Book',
     });
-    return Book;
-};
+    module.exports=Book
