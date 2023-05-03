@@ -4,10 +4,7 @@ const {sequelize} = db;
 
 
     class User extends Model {
-        static associate(models) {
-           User.hasMany(models.Post, {foreignKey:"author", onDelete: 'CASCADE'});
-          User.belongsToMany( models.Book,{through: models.UserBook,onDelete: 'CASCADE'})
-        }
+
     }
 
     User.init({

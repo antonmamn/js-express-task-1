@@ -2,17 +2,18 @@
   "development": {
     "username": "postgres",
     "password": "antoni",
-    "database": "JS_EXPRESS",
+    "database": "JS_EXPRESS_TEST",
     "host": "localhost",
     "dialect": "postgres",
     "port": 5432
   },
   "test": {
     "username": "postgres",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "password": "antoni",
+    "database": "JS_EXPRESS_TEST",
+    "host": "localhost",
+    "dialect": "postgres",
+    "port": 5432
   },
   "production": {
     "username": "root",
