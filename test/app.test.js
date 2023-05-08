@@ -1,12 +1,15 @@
 const request = require('supertest');
 const app = require('../app');
 
+
+
+
 describe('Post /users', () => {
         it('creates a new user', async () => {
             const response = await request(app).post('/users')
-                .send({firstName: "jemala", lastName: "latsabidze"});
+                .send({firstName: "nika", lastName: "latsabidze",email:"nl@gmail.com",password:"123456"});
             expect(response.status).toBe(200);
-            expect(response.body.firstName).toBe("jemala")
+            expect(response.body.firstName).toBe("nika")
         })
     }
 )
@@ -21,7 +24,7 @@ describe('GET /users/:id', () => {
     it('returns a single user by id', async () => {
         const response = await request(app).get('/users/1');
         expect(response.status).toBe(200);
-        expect(response.body.firstName).toBe('jemala');
+        expect(response.body.firstName).toBe('nika');
     });
 
     it('returns a 404 error for an invalid post id', async () => {
@@ -96,7 +99,7 @@ describe('POST /books', () => {
     it('creates a new post', async () => {
         const response = await request(app)
             .post('/books')
-            .send({book: {title: 'New Book', genre: 'Lorem ipsum'}, userids: []});
+            .send({book: {title: 'New Book', genre: 'Lorem ipsum'}, userids: [1]});
         expect(response.status).toBe(200);
         expect(response.body.title).toBe('New Book');
     });
@@ -130,13 +133,25 @@ describe('PUT /books/:id', () => {
         expect(response.status).toBe(200);
         expect(response.body[0]).toBe(1);
     });
-
     it('returns a 404 error for an invalid post id', async () => {
         const response = await request(app).put('/books/999');
         expect(response.status).toBe(404);
     });
 });
 
+describe('Get /stats/:id', () => {
+        it('gets user and its every book', async () => {
+            const response = await request(app).get('/stats/1')
+            expect(response.body.books_count).toBe(1)
+            expect(response.status).toBe(200);
+
+        });
+        it('returns a 404 error for an invalid user id ', async ()=> {
+            const response = await request(app).get('/stats/999');
+            expect(response.status).toBe(404);
+        });
+    }
+)
 
 describe('DELETE /posts/:id', () => {
     it('deletes a post by id', async () => {

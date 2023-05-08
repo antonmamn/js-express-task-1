@@ -9,6 +9,25 @@ const Post = require("./models/post")
 const Book = require("./models/book")
 const UserBook = require("./models/user-book")
 
+app.get('/stats/:id', (req, res) => {
+    UserBook.count({
+        where: {
+            userId: req.params.id
+        }
+    })
+        .then(count => {
+            if (count) {
+                res.send({
+                    user_id: req.params.id,
+                    books_count: count
+                });
+            } else {
+                res.status(404).json("user was not found in database")
+            }
+
+        })
+        .catch(error => res.send(error))
+})
 app.get('/users', (req, res) => {
     User.findAll()
         .then(data => res.send(data))
