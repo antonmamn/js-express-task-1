@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 app.use(express.json())
+const db = require('./index');
+const {sequelize} = db;
 
 const associations = require("./associations")
 const User = require("./models/user")
@@ -9,6 +11,21 @@ const Post = require("./models/post")
 const Book = require("./models/book")
 const UserBook = require("./models/user-book")
 
+app.post('/author', async (req, res) => {
+    try {
+        const result = await sequelize.transaction(async (t) => {
+                const user = await User.create(req.body.user, {transaction: t})
+                let userid = user.id
+               const book= await Book.create(req.body.book,{transaction: t})
+                const userBook = {"userId": userid, "bookId": book.id}
+                await UserBook.create(userBook,{transaction: t})
+                res.send({user:user,book:book,userBook:userBook})
+            }
+        )
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
 app.get('/stats/:id', (req, res) => {
     UserBook.count({
         where: {
@@ -26,6 +43,16 @@ app.get('/stats/:id', (req, res) => {
             }
 
         })
+        .catch(error => res.send(error))
+})
+app.post('/users', (req, res) => {
+
+    const user = User.create(req.body)
+        .then(data => {
+
+            res.send(data)
+        })
+
         .catch(error => res.send(error))
 })
 app.get('/users', (req, res) => {
@@ -46,12 +73,6 @@ app.get('/users/:id', (req, res) => {
         )
         .catch(error => res.send(error))
 })
-app.post('/users', (req, res) => {
-
-    const user = User.create(req.body)
-        .then(data => res.send(data))
-        .catch(error => res.send(error))
-})
 app.put('/users/:id', (req, res) => {
 
     User.update(req.body, {
@@ -63,13 +84,12 @@ app.put('/users/:id', (req, res) => {
             if (data[0] === 1) {
                 res.send(data)
             } else {
-                res.status(404).json(`user with id: ${req.params.id}  was not found in database`)
+                res.sendStatus(404).json(`user with id: ${req.params.id}  was not found in database`)
             }
 
         })
         .catch(error => res.send(error))
 })
-
 app.delete('/users/:id', (req, res) => {
 
     const user = User.destroy({
@@ -79,12 +99,13 @@ app.delete('/users/:id', (req, res) => {
             if (rowsAffected == 0) {
                 res.status(404).json({message: "user not found"})
             } else {
-                res.status(200).json({message: "user deleted succesfully", rowsAffected})
+                res.sendStatus(200).json({message: "user deleted succesfully", rowsAffected})
             }
         })
         .catch(error => res.send(error))
 })
 app.post(`/posts`, (req, res) => {
+
     Post.create(req.body)
         .then(data => res.send(data))
         .catch(error => res.send(error))

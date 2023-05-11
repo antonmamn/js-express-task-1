@@ -13,5 +13,6 @@ Book.init({
 }, {
     sequelize,
     modelName: 'Book',
+
 });
 module.exports = Book
