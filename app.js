@@ -16,10 +16,10 @@ app.post('/author', async (req, res) => {
         const result = await sequelize.transaction(async (t) => {
                 const user = await User.create(req.body.user, {transaction: t})
                 let userid = user.id
-               const book= await Book.create(req.body.book,{transaction: t})
+                const book = await Book.create(req.body.book, {transaction: t})
                 const userBook = {"userId": userid, "bookId": book.id}
-                await UserBook.create(userBook,{transaction: t})
-                res.send({user:user,book:book,userBook:userBook})
+                await UserBook.create(userBook, {transaction: t})
+                res.send({user: user, book: book, userBook: userBook})
             }
         )
     } catch (error) {

@@ -1,14 +1,14 @@
 const request = require('supertest');
 const app = require('../app');
-const User=require("../models/user")
-const Post=require("../models/post")
-const Book=require("../models/book")
-const UserBook=require("../models/user-book")
-let post = {id:1,title: 'New Post', text: 'Lorem ipsum', author: 1}
+const User = require("../models/user")
+const Post = require("../models/post")
+const Book = require("../models/book")
+const UserBook = require("../models/user-book")
+let post = {id: 1, title: 'New Post', text: 'Lorem ipsum', author: 1}
 describe('Post /users', () => {
         it('creates a new user', async () => {
             const response = await request(app).post('/users')
-                .send({firstName: "nika", lastName: "latsabidze",email:"nl@gmail.com",password:"123456"});
+                .send({firstName: "nika", lastName: "latsabidze", email: "nl@gmail.com", password: "123456"});
             expect(response.status).toBe(200);
             expect(response.body.firstName).toBe("nika")
         })
@@ -51,7 +51,7 @@ describe('PUT /users/:id', () => {
 describe('POST /posts', () => {
     it('creates a new post', async () => {
         let post = {title: 'New Post', text: 'Lorem ipsum', author: 1}
-        Post.create=jest.fn().mockResolvedValue(post)
+        Post.create = jest.fn().mockResolvedValue(post)
         const response = await request(app)
             .post('/posts')
             .send(post);
@@ -65,7 +65,7 @@ describe('GET /posts', () => {
     it('returns a list of posts', async () => {
         let post = {title: 'New Post', text: 'Lorem ipsum', author: 1}
 
-        Post.findAll=jest.fn().mockResolvedValue([post])
+        Post.findAll = jest.fn().mockResolvedValue([post])
         const response = await request(app).get('/posts');
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThan(0);
@@ -74,7 +74,7 @@ describe('GET /posts', () => {
 
 describe('GET /posts/:id', () => {
     it('returns a single post by id', async () => {
-        Post.findByPk=jest.fn().mockResolvedValue(post)
+        Post.findByPk = jest.fn().mockResolvedValue(post)
 
         const response = await request(app).get('/posts/1');
         expect(response.status).toBe(200);
@@ -82,7 +82,7 @@ describe('GET /posts/:id', () => {
     });
 
     it('returns a 404 error for an invalid post id', async () => {
-        Post.findByPk=jest.fn().mockResolvedValue(null)
+        Post.findByPk = jest.fn().mockResolvedValue(null)
         const response = await request(app).get('/posts/999');
         expect(response.status).toBe(404);
     });
@@ -90,7 +90,7 @@ describe('GET /posts/:id', () => {
 
 describe('PUT /posts/:id', () => {
     it('updates a post by id', async () => {
-        jest.spyOn(Post,'update').mockResolvedValue([1])
+        jest.spyOn(Post, 'update').mockResolvedValue([1])
         const response = await request(app)
             .put('/posts/1')
             .send({title: 'Updated Post'});
@@ -157,7 +157,7 @@ describe('Get /stats/:id', () => {
             expect(response.status).toBe(200);
 
         });
-        it('returns a 404 error for an invalid user id ', async ()=> {
+        it('returns a 404 error for an invalid user id ', async () => {
             const response = await request(app).get('/stats/999');
             expect(response.status).toBe(404);
         });
@@ -166,14 +166,14 @@ describe('Get /stats/:id', () => {
 
 describe('DELETE /posts/:id', () => {
     it('deletes a post by id', async () => {
-        jest.spyOn(Post,'destroy').mockResolvedValue(1)
+        jest.spyOn(Post, 'destroy').mockResolvedValue(1)
         const response = await request(app).delete('/posts/1');
         expect(response.status).toBe(200);
         expect(response.body.rowsAffected).toEqual(1);
     });
 
     it('returns a 404 error for an invalid post id', async () => {
-        jest.spyOn(Post,'destroy').mockResolvedValue(0)
+        jest.spyOn(Post, 'destroy').mockResolvedValue(0)
         const response = await request(app).delete('/posts/999');
         expect(response.status).toBe(404);
     });
